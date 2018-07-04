@@ -1,32 +1,21 @@
 package com.model;
 
-import java.util.List;
-
 /**
- * Created by Fadejimi on 7/3/18.
+ * Created by Fadejimi on 7/4/18.
  */
 
-public class Schedule {
+public class Task {
 
     private String name;
     private String description;
     private double percentage;
     private double rating;
-    private List<Task> tasks;
 
-    public Schedule(String name, String description, double percentage) {
+    public Task(String name, String description, double percentage) {
         setName(name);
         setDescription(description);
         setPercentage(percentage);
     }
-
-    public Schedule(String name, String description, double percentage, List<Task> tasks) {
-        setName(name);
-        setDescription(description);
-        setPercentage(percentage);
-        setTasks(tasks);
-    }
-
 
     public String getName() {
         return name;
@@ -50,23 +39,17 @@ public class Schedule {
 
     public void setPercentage(double percentage) {
         this.percentage = percentage;
-        double rate = percentage/100 * 5;
-        setRating(rate);
-    }
 
-    public double getRating() {
-        return rating;
+        double rate = percentage /100 * 5;
+        setRating(rate);
     }
 
     public void setRating(double rating) {
         this.rating = rating;
     }
 
-    public void setTasks(List<Task> tasks) {
-        this.tasks = tasks;
-    }
-
-    public List<Task> getTasks() {
-        return this.tasks;
+    public double getRating() {
+        return this.rating;
     }
 }
+
