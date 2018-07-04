@@ -94,4 +94,20 @@
     <string name="pref_title_vibrate">Vibrate</string>
 
     <string name="schedule">Schedule</string>
+    <string name="no_information">No Data</string>
+    <string name="percentage">%</string>
+
+    <!-- schedule form view -->
+    <string name="title">Title</string>
+    <string name="description">Description:</string>
+    <string name="percentage_complete">Percentage:</string>
+    <string name="new_schedule">New Schedule</string>
+
+    <!-- buttons -->
+    <string name="btn_cancel">Cancel</string>
+    <string name="btn_submit">Submit</string>
+
+    <!-- schedule menu -->
+    <string name="view_statistics">View Statistics</string>
+    <string name="view_task">View Tasks</string>
 </resources>
