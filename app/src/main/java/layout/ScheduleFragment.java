@@ -2,10 +2,11 @@ package layout;
 
 
 import android.app.Dialog;
+import android.app.Fragment;
 import android.media.Rating;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v4.app.Fragment;
+//import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
@@ -64,9 +65,6 @@ public class ScheduleFragment extends Fragment {
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(layoutManager);
 
-        listAdapter = new ListAdapter(data);
-        updateUI();
-
         addScheduleBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -74,6 +72,13 @@ public class ScheduleFragment extends Fragment {
             }
         });
         return view;
+    }
+
+    public void setData(List<Schedule> schedules) {
+        this.data = schedules;
+        listAdapter = new ListAdapter(data);
+        recyclerView.setAdapter(listAdapter);
+        updateUI();
     }
 
     private void showAddDialog() {
@@ -127,7 +132,7 @@ public class ScheduleFragment extends Fragment {
         }
     }
 
-    public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
+    private class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
         private List<Schedule> schedules;
 
         public ListAdapter(List<Schedule> data) {

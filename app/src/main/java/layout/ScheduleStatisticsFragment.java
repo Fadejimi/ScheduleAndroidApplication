@@ -1,8 +1,9 @@
 package layout;
 
 
+import android.app.Fragment;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
+//import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -56,6 +57,8 @@ public class ScheduleStatisticsFragment extends Fragment {
         builder.setDateFormat("M/d/yy hh:mm a");
         gson = builder.create();
         updateUI();
+
+        setRetainInstance(true);
         return view;
     }
 
@@ -93,5 +96,14 @@ public class ScheduleStatisticsFragment extends Fragment {
         BarData barData = new BarData(dataSet);
         barChart.setData(barData);
         barChart.invalidate();
+    }
+
+    public void setMode(boolean flag) {
+        if (flag) {
+            linearLayout.setVisibility(View.VISIBLE);
+        }
+        else {
+            linearLayout.setVisibility(View.GONE);
+        }
     }
 }

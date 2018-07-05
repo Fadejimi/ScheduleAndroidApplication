@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TableLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp">
+
+        <TableRow
+            android:layout_marginTop="10dp">
+            <com.rengwuxian.materialedittext.MaterialEditText
+                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:id="@+id/title_edit_text"
+                app:met_floatingLabel="highlight"
+                android:hint="@string/title"
+                app:met_baseColor="@android:color/darker_gray"
+                app:met_primaryColor="@color/colorPrimary"
+                app:met_errorColor="@android:color/holo_red_dark"/>
+        </TableRow>
+
+        <TableRow
+            android:layout_marginTop="10dp">
+            <com.rengwuxian.materialedittext.MaterialEditText
+                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:id="@+id/description_edit_text"
+                app:met_floatingLabel="highlight"
+                android:hint="@string/description"
+                app:met_baseColor="@android:color/darker_gray"
+                app:met_primaryColor="@color/colorPrimary"
+                app:met_errorColor="@android:color/holo_red_dark"
+                app:met_singleLineEllipsis="true"/>
+        </TableRow>
+
+        <TableRow
+            android:layout_marginTop="10dp">
+            <com.rengwuxian.materialedittext.MaterialEditText
+                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:id="@+id/percentage_text"
+                app:met_floatingLabel="highlight"
+                app:met_helperText="Integer"
+                android:inputType="numberDecimal"
+                android:hint="@string/percentage_complete"
+                app:met_baseColor="@android:color/darker_gray"
+                app:met_primaryColor="@color/colorPrimary"
+                app:met_errorColor="@android:color/holo_red_dark"
+                app:met_singleLineEllipsis="true"/>
+        </TableRow>
+    </TableLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <com.beardedhen.androidbootstrap.BootstrapButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_marginStart="20dp"
+            android:text="@string/btn_cancel"
+            app:bootstrapBrand="danger"
+            app:buttonMode="regular"
+            app:showOutline="false"
+            app:roundedCorners="true"
+            android:id="@+id/btn_cancel" />
+
+        <com.beardedhen.androidbootstrap.BootstrapButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="20dp"
+            android:layout_marginEnd="20dp"
+            android:text="@string/btn_submit"
+            app:bootstrapBrand="primary"
+            app:buttonMode="regular"
+            app:showOutline="false"
+            app:roundedCorners="true"
+            android:id="@+id/btn_submit"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"/>
+    </RelativeLayout>
+</LinearLayout>
