@@ -3,6 +3,7 @@ package layout;
 
 import android.app.Dialog;
 import android.app.Fragment;
+import android.app.FragmentManager;
 import android.media.Rating;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -23,7 +24,9 @@ import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.beardedhen.androidbootstrap.BootstrapButton;
 import com.model.Schedule;
+import com.scheduler.MainActivity;
 import com.scheduler.R;
 
 import java.util.ArrayList;
@@ -60,36 +63,47 @@ public class ScheduleFragment extends Fragment {
         addScheduleBtn = (FloatingActionButton) view.findViewById(R.id.add_schedule);
 
         data = new ArrayList<>();
+        setData();
 
         final LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(layoutManager);
 
+        listAdapter = new ListAdapter(data);
+        recyclerView.setAdapter(listAdapter);
+        updateUI();
+
+
         addScheduleBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Toast.makeText(getActivity(), "Add Schedule button clicked", Toast.LENGTH_SHORT).show();
                 showAddDialog();
             }
         });
         return view;
     }
 
+    public void setData() {
+        data.add(new Schedule("New Project", "This is a new project", 10));
+        data.add(new Schedule("2nd Project", "This is another project", 50));
+    }
+
     public void setData(List<Schedule> schedules) {
         this.data = schedules;
-        listAdapter = new ListAdapter(data);
-        recyclerView.setAdapter(listAdapter);
-        updateUI();
+
     }
 
     private void showAddDialog() {
         final Dialog dialog = new Dialog(getActivity());
         dialog.setContentView(R.layout.new_schedule);
         dialog.setTitle(getString(R.string.new_schedule));
+        dialog.show();
 
         final EditText nameText = (EditText) dialog.findViewById(R.id.title_edit_text);
         final EditText descriptionText = (EditText) dialog.findViewById(R.id.description_edit_text);
-        final Button submitButton = (Button) dialog.findViewById(R.id.btn_submit);
-        final Button cancelButton = (Button) dialog.findViewById(R.id.btn_cancel);
+        final BootstrapButton submitButton = (BootstrapButton) dialog.findViewById(R.id.btn_submit);
+        final BootstrapButton cancelButton = (BootstrapButton) dialog.findViewById(R.id.btn_cancel);
 
         submitButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -103,6 +117,10 @@ public class ScheduleFragment extends Fragment {
                             Toast.LENGTH_SHORT).show();
                 }
                 else {
+                    Schedule schedule = new Schedule(name, description, 0);
+                    data.add(schedule);
+                    updateUI();
+                    //
                     Toast.makeText(getActivity(), "Schedule has been created",
                             Toast.LENGTH_SHORT).show();
 
@@ -129,6 +147,7 @@ public class ScheduleFragment extends Fragment {
             emptyTextView.setVisibility(View.GONE);
             emptyImageView.setVisibility(View.GONE);
             recyclerView.setVisibility(View.VISIBLE);
+            listAdapter.notifyDataSetChanged();
         }
     }
 
@@ -141,7 +160,7 @@ public class ScheduleFragment extends Fragment {
 
         public class ViewHolder extends RecyclerView.ViewHolder {
             private TextView nameView;
-            private TextView percentageView;
+            //private TextView percentageView;
             private RatingBar ratingView;
             private ImageView moreView;
 
@@ -149,7 +168,7 @@ public class ScheduleFragment extends Fragment {
                 super(itemView);
 
                 this.nameView = (TextView) itemView.findViewById(R.id.title_view);
-                this.percentageView = (TextView) itemView.findViewById(R.id.percentage_view);
+                //this.percentageView = (TextView) itemView.findViewById(R.id.percentage_view);
                 this.ratingView = (RatingBar) itemView.findViewById(R.id.rating_view);
                 this.moreView = (ImageView) itemView.findViewById(R.id.img_more);
             }
@@ -171,7 +190,7 @@ public class ScheduleFragment extends Fragment {
             StringBuilder sb = new StringBuilder(String.valueOf(schedules.get(position).getPercentage()));
             sb.append(getString(R.string.percentage));
 
-            holder.percentageView.setText(sb.toString());
+            //holder.percentageView.setText(sb.toString());
             holder.ratingView.setRating((float) schedules.get(position).getRating());
 
             holder.moreView.setOnClickListener(new View.OnClickListener() {
@@ -207,15 +226,32 @@ public class ScheduleFragment extends Fragment {
 
         @Override
         public boolean onMenuItemClick(MenuItem item) {
+            Fragment fragment = null;
+            String tag = null;
             switch(item.getItemId()) {
                 case R.id.view_statistics:
                     Toast.makeText(getActivity(), "Name: " + schedule.getName() + ", statistics",
                             Toast.LENGTH_SHORT).show();
+
+                    fragment = new ScheduleStatisticsFragment();
+                    tag = MainActivity.SCHEDULE_STATISTICS_FRAGMENT;
+
                     break;
                 case R.id.view_tasks:
                     Toast.makeText(getActivity(), "Name: " + schedule.getName() + ", tasks",
                             Toast.LENGTH_SHORT).show();
+
+                    fragment = new TaskFragment();
+                    tag = MainActivity.TASK_FRAGMENT;
                     break;
+            }
+
+            if (fragment != null && tag != null) {
+                FragmentManager manager = getActivity().getFragmentManager();
+                manager.beginTransaction()
+                        .replace(R.id.content_view, fragment, tag)
+                        .addToBackStack(null)
+                        .commit();
             }
             return false;
         }

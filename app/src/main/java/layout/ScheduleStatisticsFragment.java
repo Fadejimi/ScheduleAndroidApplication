@@ -63,23 +63,24 @@ public class ScheduleStatisticsFragment extends Fragment {
     }
 
     private void updateUI() {
-        String data = getArguments().getString("schedule");
-        if (data != null) {
-            Schedule schedule = null;
-            JSONObject jsonObject = null;
-            try {
-                jsonObject = new JSONObject(data);
+        if (getArguments() != null) {
+            String data = getArguments().getString("schedule");
+            if (data != null) {
+                Schedule schedule = null;
+                JSONObject jsonObject = null;
+                try {
+                    jsonObject = new JSONObject(data);
 
-                schedule = gson.fromJson(jsonObject.getJSONObject("schedule").toString(),
-                        Schedule.class);
-            }
-            catch(JSONException e) {
-                e.printStackTrace();
-            }
+                    schedule = gson.fromJson(jsonObject.getJSONObject("schedule").toString(),
+                            Schedule.class);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
 
-            scheduleView.setText(schedule.getName());
-            descriptionView.setText(schedule.getDescription());
-            updateBarChart(schedule.getTasks());
+                scheduleView.setText(schedule.getName());
+                descriptionView.setText(schedule.getDescription());
+                updateBarChart(schedule.getTasks());
+            }
         }
     }
 

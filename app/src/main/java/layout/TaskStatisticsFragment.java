@@ -19,6 +19,7 @@ import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.beardedhen.androidbootstrap.BootstrapButton;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.model.Schedule;
@@ -28,6 +29,7 @@ import com.scheduler.R;
 import org.json.JSONArray;
 import org.json.JSONException;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -65,6 +67,8 @@ public class TaskStatisticsFragment extends Fragment {
         progressBar = (ProgressBar) view.findViewById(R.id.progress_bar);
         recyclerView = (RecyclerView) view.findViewById(R.id.task_view);
         addTaskButton = (FloatingActionButton) view.findViewById(R.id.add_task);
+
+        data = new ArrayList<>();
 
         final LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
@@ -116,6 +120,8 @@ public class TaskStatisticsFragment extends Fragment {
             emptyTextView.setVisibility(View.GONE);
             emptyImageView.setVisibility(View.GONE);
             recyclerView.setVisibility(View.VISIBLE);
+
+            listAdapter.notifyDataSetChanged();
         }
     }
 
@@ -123,12 +129,13 @@ public class TaskStatisticsFragment extends Fragment {
         final Dialog dialog = new Dialog(getActivity());
         dialog.setContentView(R.layout.new_task);
         dialog.setTitle("New Task");
+        dialog.show();
 
         EditText nameEditText = (EditText) dialog.findViewById(R.id.title_edit_text);
         EditText descriptionEditText = (EditText) dialog.findViewById(R.id.description_edit_text);
         final EditText percentageEditText = (EditText) dialog.findViewById(R.id.percentage_text);
-        Button submitButton = (Button) dialog.findViewById(R.id.btn_submit);
-        Button cancelButton = (Button) dialog.findViewById(R.id.btn_cancel);
+        BootstrapButton submitButton = (BootstrapButton) dialog.findViewById(R.id.btn_submit);
+        BootstrapButton cancelButton = (BootstrapButton) dialog.findViewById(R.id.btn_cancel);
 
         nameEditText.setVisibility(View.GONE);
         descriptionEditText.setVisibility(View.GONE);
@@ -141,7 +148,9 @@ public class TaskStatisticsFragment extends Fragment {
                 if (isValid()) {
                     double percentage = Double.parseDouble(percentageText);
 
-
+                    Task task = new Task("name", "description", percentage);
+                    data.add(task);
+                    updateUI();
                     /** -- ToDo Upload task to server -- **/
                     Toast.makeText(getActivity(), "Task has been updated " + percentage + "%",
                             Toast.LENGTH_SHORT).show();
@@ -197,7 +206,7 @@ public class TaskStatisticsFragment extends Fragment {
 
         public class ViewHolder extends RecyclerView.ViewHolder {
             private TextView nameTextView;
-            private TextView percentageView;
+            //private TextView percentageView;
             private RatingBar ratingBar;
             private ImageView menuView;
 
@@ -205,7 +214,7 @@ public class TaskStatisticsFragment extends Fragment {
                 super(itemView);
 
                 nameTextView = (TextView) itemView.findViewById(R.id.title_view);
-                percentageView = (TextView) itemView.findViewById(R.id.percentage_view);
+                //percentageView = (TextView) itemView.findViewById(R.id.percentage_view);
                 ratingBar = (RatingBar) itemView.findViewById(R.id.rating_view);
                 menuView = (ImageView) itemView.findViewById(R.id.img_more);
 
@@ -227,7 +236,7 @@ public class TaskStatisticsFragment extends Fragment {
             holder.nameTextView.setText(data.get(position).getName());
             StringBuilder sb = new StringBuilder(String.valueOf(data.get(position).getPercentage()));
             sb.append(getString(R.string.percentage));
-            holder.percentageView.setText(sb.toString());
+            //holder.percentageView.setText(sb.toString());
             holder.ratingBar.setRating((float) data.get(position).getRating());
 
 

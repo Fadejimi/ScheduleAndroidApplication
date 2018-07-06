@@ -22,6 +22,7 @@ import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.beardedhen.androidbootstrap.BootstrapButton;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.model.Schedule;
@@ -31,6 +32,7 @@ import com.scheduler.R;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -71,6 +73,8 @@ public class TaskFragment extends Fragment {
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(layoutManager);
 
+        data = new ArrayList<>();
+
         listAdapter = new ListAdapter(data);
         recyclerView.setAdapter(listAdapter);
 
@@ -92,18 +96,19 @@ public class TaskFragment extends Fragment {
     }
 
     private void setData() {
-        String jsonData = getArguments().getString("schedule");
-        if (jsonData != null) {
-            JSONObject jsonObject = null;
-            try {
-                jsonObject = new JSONObject(jsonData);
+        if (getArguments() != null) {
+            String jsonData = getArguments().getString("schedule");
+            if (jsonData != null) {
+                JSONObject jsonObject = null;
+                try {
+                    jsonObject = new JSONObject(jsonData);
 
-                schedule = gson.fromJson(jsonObject.getJSONObject("schedule").toString(),
-                        Schedule.class);
-                data = schedule.getTasks();
-            }
-            catch(JSONException e) {
-                e.printStackTrace();
+                    schedule = gson.fromJson(jsonObject.getJSONObject("schedule").toString(),
+                            Schedule.class);
+                    data = schedule.getTasks();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
             }
         }
     }
@@ -118,6 +123,7 @@ public class TaskFragment extends Fragment {
             emptyTextView.setVisibility(View.GONE);
             emptyImageView.setVisibility(View.GONE);
             recyclerView.setVisibility(View.VISIBLE);
+            listAdapter.notifyDataSetChanged();
         }
     }
 
@@ -125,12 +131,13 @@ public class TaskFragment extends Fragment {
         final Dialog dialog = new Dialog(getActivity());
         dialog.setContentView(R.layout.new_task);
         dialog.setTitle("New Task");
+        dialog.show();
 
         final EditText nameEditText = (EditText) dialog.findViewById(R.id.title_edit_text);
         final EditText descriptionEditText = (EditText) dialog.findViewById(R.id.description_edit_text);
         final EditText percentageEditText = (EditText) dialog.findViewById(R.id.percentage_text);
-        Button submitButton = (Button) dialog.findViewById(R.id.btn_submit);
-        Button cancelButton = (Button) dialog.findViewById(R.id.btn_cancel);
+        BootstrapButton submitButton = (BootstrapButton) dialog.findViewById(R.id.btn_submit);
+        BootstrapButton cancelButton = (BootstrapButton) dialog.findViewById(R.id.btn_cancel);
 
         submitButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -143,7 +150,8 @@ public class TaskFragment extends Fragment {
                     double percentage = Double.parseDouble(percentageText);
 
                     Task task = new Task(name, description, percentage);
-
+                    data.add(task);
+                    updateUI();
                     /** -- ToDo Upload task to server -- **/
                     Toast.makeText(getActivity(), "Task has been created", Toast.LENGTH_SHORT).show();
                     dialog.dismiss();
@@ -191,7 +199,7 @@ public class TaskFragment extends Fragment {
 
         public class ViewHolder extends RecyclerView.ViewHolder {
             private TextView nameTextView;
-            private TextView percentageView;
+            //private TextView percentageView;
             private RatingBar ratingBar;
             private ImageView menuView;
 
@@ -199,7 +207,7 @@ public class TaskFragment extends Fragment {
                 super(itemView);
 
                 nameTextView = (TextView) itemView.findViewById(R.id.title_view);
-                percentageView = (TextView) itemView.findViewById(R.id.percentage_view);
+                //percentageView = (TextView) itemView.findViewById(R.id.percentage_view);
                 ratingBar = (RatingBar) itemView.findViewById(R.id.rating_view);
                 menuView = (ImageView) itemView.findViewById(R.id.img_more);
             }
@@ -219,7 +227,7 @@ public class TaskFragment extends Fragment {
             holder.nameTextView.setText(data.get(position).getName());
             StringBuilder sb = new StringBuilder(String.valueOf(data.get(position).getPercentage()));
             sb.append(getString(R.string.percentage));
-            holder.percentageView.setText(sb.toString());
+            //holder.percentageView.setText(sb.toString());
             holder.ratingBar.setRating((float) data.get(position).getRating());
 
             holder.menuView.setOnClickListener(new View.OnClickListener() {

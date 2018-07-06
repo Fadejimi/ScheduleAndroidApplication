@@ -18,9 +18,9 @@ import layout.TaskStatisticsFragment;
 public class MainActivity extends AppCompatActivity {
 
     public static final String SCHEDULE_FRAGMENT = "schedules";
-    public final String TASK_FRAGMENT = "tasks";
-    public final String SCHEDULE_STATISTICS_FRAGMENT = "schedule_statistics";
-    public final String TASK_STATISTICS_FRAGMENT = "task_statistics";
+    public static final String TASK_FRAGMENT = "tasks";
+    public static final String SCHEDULE_STATISTICS_FRAGMENT = "schedule_statistics";
+    public static final String TASK_STATISTICS_FRAGMENT = "task_statistics";
 
     private FragmentManager manager;
     List<Schedule> schedules;
@@ -34,10 +34,9 @@ public class MainActivity extends AppCompatActivity {
 
         manager = getFragmentManager();
         if (!validFragment()) {
-            //setData();
             ScheduleFragment fragment = new ScheduleFragment();
-            manager.beginTransaction().add(fragment, SCHEDULE_FRAGMENT).commit();
-            fragment.setData(schedules);
+            manager.beginTransaction()
+                    .replace(R.id.content_view, fragment, SCHEDULE_FRAGMENT).commit();
         }
     }
 
