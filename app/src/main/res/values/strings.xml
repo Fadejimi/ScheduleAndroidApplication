@@ -110,4 +110,12 @@
     <!-- schedule menu -->
     <string name="view_statistics">View Statistics</string>
     <string name="view_task">View Tasks</string>
+
+    <!-- task menu -->
+    <string name="update_task">Update Task</string>
+
+    <!-- app title names -->
+    <string name="schedule_statistics">Schedule Statistics</string>
+    <string name="task_statistics">Task Statistics</string>
+    <string name="task">Task</string>
 </resources>

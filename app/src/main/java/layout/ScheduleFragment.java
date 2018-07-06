@@ -73,6 +73,8 @@ public class ScheduleFragment extends Fragment {
         recyclerView.setAdapter(listAdapter);
         updateUI();
 
+        ((MainActivity) getActivity()).setActionBarTitle(getString(R.string.schedule));
+        ((MainActivity) getActivity()).setToolbar();
 
         addScheduleBtn.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -24,6 +24,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.model.Schedule;
 import com.model.Task;
+import com.scheduler.MainActivity;
 import com.scheduler.R;
 
 import org.json.JSONArray;
@@ -84,6 +85,8 @@ public class TaskStatisticsFragment extends Fragment {
         setData();
         updateUI();
 
+        ((MainActivity) getActivity()).setActionBarTitle(getString(R.string.task_statistics));
+
         addTaskButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {
@@ -95,17 +98,18 @@ public class TaskStatisticsFragment extends Fragment {
     }
 
     private void setData() {
-        String jsonData = getArguments().getString("tasks");
-        if (jsonData != null) {
-            JSONArray jsonArray = null;
-            try {
-                jsonArray = new JSONArray(jsonData);
+        if (getArguments() != null) {
+            String jsonData = getArguments().getString("tasks");
+            if (jsonData != null) {
+                JSONArray jsonArray = null;
+                try {
+                    jsonArray = new JSONArray(jsonData);
 
-                data = Arrays.asList(gson.fromJson(jsonArray.toString(),
-                        Task[].class));
-            }
-            catch(JSONException e) {
-                e.printStackTrace();
+                    data = Arrays.asList(gson.fromJson(jsonArray.toString(),
+                            Task[].class));
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
             }
         }
     }

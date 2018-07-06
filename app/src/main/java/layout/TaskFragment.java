@@ -6,6 +6,7 @@ import android.app.Fragment;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 //import android.support.v4.app.Fragment;
+import android.app.FragmentManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
@@ -27,6 +28,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.model.Schedule;
 import com.model.Task;
+import com.scheduler.MainActivity;
 import com.scheduler.R;
 
 import org.json.JSONException;
@@ -85,6 +87,7 @@ public class TaskFragment extends Fragment {
         setData();
         updateUI();
 
+        ((MainActivity) getActivity()).setActionBarTitle(getString(R.string.task));
         addTaskButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {
@@ -250,30 +253,87 @@ public class TaskFragment extends Fragment {
     public void showPopUpMenu(View view, int position) {
         PopupMenu popupMenu = new PopupMenu(view.getContext(), view);
         MenuInflater menuInflater = popupMenu.getMenuInflater();
-        menuInflater.inflate(R.menu.schedule_popup_menu, popupMenu.getMenu());
+        menuInflater.inflate(R.menu.task_popup_menu, popupMenu.getMenu());
         popupMenu.setOnMenuItemClickListener(new TaskMenuItemClickListener(position));
         popupMenu.show();
     }
 
     class TaskMenuItemClickListener implements PopupMenu.OnMenuItemClickListener {
         Task task;
+        int position;
         public TaskMenuItemClickListener(int position) {
+            this.position = position;
             task = data.get(position);
         }
 
         @Override
         public boolean onMenuItemClick(MenuItem item) {
+            Fragment fragment = null;
+            String tag = null;
             switch(item.getItemId()) {
-                case R.id.view_statistics:
+                case R.id.update_task:
                     Toast.makeText(getActivity(), "Name: " + task.getName() + ", statistics",
                             Toast.LENGTH_SHORT).show();
+                    //fragment = new TaskStasticsFragment();
+
+                    showUpdateTask(position);
                     break;
                 case R.id.view_tasks:
                     Toast.makeText(getActivity(), "Name: " + task.getName() + ", tasks",
                             Toast.LENGTH_SHORT).show();
+                    fragment = new TaskStatisticsFragment();
+                    tag = MainActivity.TASK_STATISTICS_FRAGMENT;
                     break;
             }
+
+            FragmentManager fm = getActivity().getFragmentManager();
+            fm.beginTransaction()
+                    .replace(R.id.content_view, fragment, tag)
+                    .addToBackStack(null)
+                    .commit();
             return false;
+        }
+
+        private void showUpdateTask(int position) {
+            Dialog dialog = new Dialog(getActivity());
+            dialog.setContentView(R.layout.new_task);
+            dialog.setTitle(getString(R.string.update_task));
+            dialog.show();
+
+            EditText titleText = (EditText) dialog.findViewById(R.id.title_edit_text);
+            final EditText descriptionEditText = (EditText) dialog.findViewById(R.id.description_edit_text);
+            final EditText percentageEditText = (EditText) dialog.findViewById(R.id.percentage_text);
+            BootstrapButton submitButton = (BootstrapButton) dialog.findViewById(R.id.btn_submit);
+            BootstrapButton cancelButton = (BootstrapButton) dialog.findViewById(R.id.btn_cancel);
+            final int pos = position;
+
+            titleText.setVisibility(View.GONE);
+            descriptionEditText.setVisibility(View.GONE);
+
+            submitButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    String percentageText = percentageEditText.getText().toString();
+
+                    if (percentageText != null && isDouble(percentageText)) {
+                        double percentage = Double.parseDouble(percentageText);
+                        Task task = data.get(pos);
+                        task.setPercentage(percentage);
+
+                        listAdapter.notifyItemChanged(pos);
+                    }
+                }
+            });
+        }
+
+        private boolean isDouble(String text) {
+            try {
+                Double.parseDouble(text);
+                return true;
+            }
+            catch (NumberFormatException ex) {
+                return false;
+            }
         }
     }
 }

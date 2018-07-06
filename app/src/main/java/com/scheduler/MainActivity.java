@@ -1,5 +1,6 @@
 package com.scheduler;
 
+import android.app.ActionBar;
 import android.app.FragmentManager;
 import android.content.res.Configuration;
 import android.support.v7.app.AppCompatActivity;
@@ -33,11 +34,20 @@ public class MainActivity extends AppCompatActivity {
         schedules = new ArrayList<>();
 
         manager = getFragmentManager();
+
+
         if (!validFragment()) {
             ScheduleFragment fragment = new ScheduleFragment();
             manager.beginTransaction()
                     .replace(R.id.content_view, fragment, SCHEDULE_FRAGMENT).commit();
         }
+    }
+
+    public void setToolbar() {
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+    }
+    public void setActionBarTitle(String text) {
+        getSupportActionBar().setTitle(text);
     }
 
     private boolean validFragment() {

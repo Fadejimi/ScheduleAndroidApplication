@@ -19,6 +19,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.model.Schedule;
 import com.model.Task;
+import com.scheduler.MainActivity;
 import com.scheduler.R;
 
 import org.json.JSONException;
@@ -58,6 +59,7 @@ public class ScheduleStatisticsFragment extends Fragment {
         gson = builder.create();
         updateUI();
 
+        ((MainActivity) getActivity()).setActionBarTitle(getString(R.string.schedule_statistics));
         setRetainInstance(true);
         return view;
     }
@@ -82,6 +84,20 @@ public class ScheduleStatisticsFragment extends Fragment {
                 updateBarChart(schedule.getTasks());
             }
         }
+        else {
+            List<Task> tasks = getTasks();
+            updateBarChart(tasks);
+        }
+    }
+
+    private List<Task> getTasks() {
+        List<Task> tasks = new ArrayList<>();
+
+        tasks.add(new Task("first", "new", 40));
+        tasks.add(new Task("second", "new", 50));
+        tasks.add(new Task("third", "new", 30));
+
+        return tasks;
     }
 
     private void updateBarChart(List<Task> tasks) {
