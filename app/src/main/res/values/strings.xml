@@ -112,6 +112,9 @@
     <string name="view_task">View Tasks</string>
 
     <!-- task menu -->
+    <string name="delete_task">Delete Task</string>
+    <string name="delete_schedule">Delete Schedule</string>
+
     <string name="update_task">Update Task</string>
 
     <!-- app title names -->

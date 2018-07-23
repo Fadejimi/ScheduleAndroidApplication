@@ -6,4 +6,7 @@
     <item
         android:id="@+id/view_tasks"
         android:title="@string/view_task" />
+    <item
+        android:id="@+id/delete_schedule"
+        android:title="@string/delete_schedule" />
 </menu>

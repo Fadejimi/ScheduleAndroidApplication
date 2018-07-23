@@ -1,9 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
-        android:id="@+id/update_task"
+        android:id="@+id/update_tasks"
         android:title="@string/update_task" />
     <item
         android:id="@+id/view_tasks"
         android:title="@string/view_statistics" />
+    <item
+        android:id="@+id/delete_task"
+        android:title="@string/delete_task" />
 </menu>

@@ -16,7 +16,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="20dp"
+            android:textSize="15sp"
             android:text="@string/schedule"
             android:textAllCaps="true"
             android:textStyle="bold"
@@ -35,8 +35,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/title_view"
+            style="?android:attr/ratingBarStyleIndicator"
             android:layout_marginTop="20dp"
             android:stepSize="0.1"
+            android:isIndicator="true"
             android:rating="2.4"
             android:id="@+id/rating_view"/>
 
