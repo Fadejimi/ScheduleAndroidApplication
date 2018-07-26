@@ -15,7 +15,7 @@ import com.google.android.gms.common.SignInButton;
 import app.model.UserInfo;
 import app.presenter.LoginPresenter;
 import app.presenter.SignInPresenter;
-import app.scheduler.R;
+import com.scheduler.R;
 import app.view.LoginView;
 
 /**
@@ -50,6 +50,16 @@ public class LoginActivity extends AppCompatActivity implements LoginView {
         });
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        signInPresenter.onStart();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        signInPresenter.onActivityResult(LoginActivity.this, requestCode, resultCode, data);
+    }
 
 
     private void bindViews() {

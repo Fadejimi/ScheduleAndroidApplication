@@ -23,7 +23,7 @@ import app.rest.APIClient;
 import app.rest.TaskService;
 import app.rest.model.Schedule;
 import app.rest.model.Task;
-import app.scheduler.R;
+import com.scheduler.R;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -72,7 +72,7 @@ public class ScheduleStatisticsFragment extends Fragment {
         String token = userSingletonModel.getToken();
 
         TaskService taskService = APIClient.createService(TaskService.class, token);
-        Call<List<Task>> call = taskService.getTasks(schedule.getId());
+        Call<List<Task>> call = taskService.getTasksBySchedule(schedule.getId());
 
         call.enqueue(new Callback<List<Task>>() {
             @Override

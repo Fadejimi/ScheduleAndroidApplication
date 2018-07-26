@@ -8,8 +8,8 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.beardedhen.androidbootstrap.BootstrapButton;
+import com.scheduler.R;
 
-import app.activities.MainActivity;
 import app.model.UserInfo;
 import app.rest.APIClient;
 import app.rest.ScheduleService;
@@ -32,14 +32,14 @@ public class ScheduleDialog implements DialogInterface {
     }
 
     public void showDialog() {
-        dialog.setContentView(app.scheduler.R.layout.new_schedule);
-        dialog.setTitle(context.getString(app.scheduler.R.string.new_schedule));
+        dialog.setContentView(R.layout.new_schedule);
+        dialog.setTitle(context.getString(R.string.new_schedule));
         dialog.show();
 
-        final EditText nameText =  dialog.findViewById(app.scheduler.R.id.title_edit_text);
-        final EditText descriptionText =  dialog.findViewById(app.scheduler.R.id.description_edit_text);
-        final BootstrapButton submitButton = dialog.findViewById(app.scheduler.R.id.btn_submit);
-        final BootstrapButton cancelButton = dialog.findViewById(app.scheduler.R.id.btn_cancel);
+        final EditText nameText =  dialog.findViewById(R.id.title_edit_text);
+        final EditText descriptionText =  dialog.findViewById(R.id.description_edit_text);
+        final BootstrapButton submitButton = dialog.findViewById(R.id.btn_submit);
+        final BootstrapButton cancelButton = dialog.findViewById(R.id.btn_cancel);
         final String token = userSingletonModel.getToken();
         submitButton.setOnClickListener(new View.OnClickListener() {
             @Override

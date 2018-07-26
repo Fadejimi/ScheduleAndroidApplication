@@ -1,53 +1,55 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context="com.fragments.TaskStatisticsFragment">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/task_view"
+    <data>
+        <import type="android.view.View" />
+
+        <variable
+            name="taskStatisticsViewModel"
+            type="app.viewmodels.TaskStatisticsViewModel" />
+    </data>
+
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_margin="10dp"
-        android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"/>
+        tools:context="com.fragments.TaskStatisticsFragment">
 
-    <ProgressBar
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
-        style="?android:attr/progressBarStyle"
-        android:visibility="gone"
-        android:id="@+id/progress_bar"/>
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/task_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:layout_margin="10dp"
+            android:visibility="@{taskStatisticsViewModel.recyclerView}"/>
 
-    <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
-        android:src="@drawable/ic_empty"
-        android:visibility="gone"
-        android:id="@+id/empty_image"/>
+        <ProgressBar
+            android:id="@+id/progress_bar"
+            style="?android:attr/progressBarStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:visibility="@{taskStatisticsViewModel.progressBar}" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/empty_textview"
-        android:layout_below="@+id/empty_image"
-        android:layout_centerHorizontal="true"
-        android:text="@string/no_information"
-        android:visibility="gone"/>
+        <ImageView
+            android:id="@+id/empty_image"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:src="@drawable/ic_empty"
+            android:visibility="@{taskStatisticsViewModel.imageView}" />
 
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/add_task"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="end|bottom"
-        android:layout_alignParentBottom="true"
-        android:layout_margin="16dp"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        android:src="@drawable/ic_add"/>
+        <TextView
+            android:id="@+id/empty_textview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/empty_image"
+            android:layout_centerHorizontal="true"
+            android:text="@{taskStatisticsViewModel.messageLabel}"
+            android:visibility="@{taskStatisticsViewModel.taskLabel}" />
 
-</RelativeLayout>
+    </RelativeLayout>
+</layout>

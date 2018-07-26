@@ -1,71 +1,65 @@
 package app.recview;
 
-import android.content.Context;
+import android.databinding.DataBindingUtil;
+import android.support.annotation.NonNull;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.RatingBar;
-import android.widget.TextView;
+
+import com.scheduler.R;
+import com.scheduler.databinding.TaskMilestoneItemBinding;
 
 import java.util.List;
 
-import app.scheduler.R;
-import androidx.recyclerview.widget.RecyclerView;
 import app.rest.model.Task;
 import app.rest.model.TasksMilestone;
-import app.utils.DateUtil;
+import app.viewmodels.ItemTaskStatisticsViewModel;
 
-public class TaskDetailsAdapter extends RecyclerView.Adapter<TaskDetailsAdapter.ViewHolder> {
+public class TaskDetailsAdapter extends RecyclerView.Adapter<TaskDetailsAdapter.TaskDetailsViewHolder> {
     private List<TasksMilestone> data;
     private Task task;
-    private Context mCon;
-
-    public TaskDetailsAdapter(Context mCon, List<TasksMilestone> tasks, Task task) {
-        this.data = tasks;
-        this.mCon = mCon;
+    public TaskDetailsAdapter(Task task) {
+        this.task = task;
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
-        private TextView nameTextView;
-        //private TextView percentageView;
-        private RatingBar ratingBar;
-        private ImageView menuView;
+    public class TaskDetailsViewHolder extends RecyclerView.ViewHolder {
+        TaskMilestoneItemBinding binding;
 
-        public ViewHolder(View itemView) {
-            super(itemView);
+        public TaskDetailsViewHolder(TaskMilestoneItemBinding itemBinding) {
+            super(itemBinding.getRoot());
+            this.binding = itemBinding;
+        }
 
-            nameTextView = itemView.findViewById(app.scheduler.R.id.title_view);
-            //percentageView = (TextView) itemView.findViewById(R.id.percentage_view);
-            ratingBar = itemView.findViewById(app.scheduler.R.id.rating_view);
-            menuView = itemView.findViewById(app.scheduler.R.id.img_more);
-
-            menuView.setVisibility(View.GONE);
+        void bindTask(TasksMilestone tasksMilestone) {
+            if (binding.getTaskViewModel() == null) {
+                binding.setTaskViewModel(new ItemTaskStatisticsViewModel(tasksMilestone));
+            }
+            else {
+                binding.getTaskViewModel().setTasksMilestone(tasksMilestone);
+            }
         }
     }
 
     @Override
-    public TaskDetailsAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(app.scheduler.R.layout.recyclerview_item,
-                parent, false);
+    public TaskDetailsAdapter.TaskDetailsViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        TaskMilestoneItemBinding itemBinding = DataBindingUtil.inflate(LayoutInflater.from(parent.getContext()),
+                R.layout.task_milestone_item, parent, false);
+        TaskDetailsAdapter.TaskDetailsViewHolder viewHolder = new TaskDetailsViewHolder(itemBinding);
 
-        ViewHolder viewHolder = new ViewHolder(view);
         return viewHolder;
     }
 
     @Override
-    public void onBindViewHolder(final TaskDetailsAdapter.ViewHolder holder, final int position) {
-        holder.nameTextView.setText(DateUtil.formatter(data.get(position).getCreatedAt()));
-        double percentage = data.get(position).getPercentage();
-        StringBuilder sb = new StringBuilder(String.valueOf(percentage));
-        sb.append(mCon.getString(R.string.percentage));
-        //holder.percentageView.setText(sb.toString());
-        double rating = percentage/100 * 5;
-        holder.ratingBar.setRating((float) rating);
+    public void onBindViewHolder(@NonNull TaskDetailsViewHolder taskDetailsViewHolder, int i) {
+        taskDetailsViewHolder.bindTask(data.get(i));
     }
 
     @Override
     public int getItemCount() {
         return data.size();
+    }
+
+    public void setTaskMilestones(List<TasksMilestone> data) {
+        this.data = data;
     }
 }

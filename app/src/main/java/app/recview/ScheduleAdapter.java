@@ -1,91 +1,56 @@
 package app.recview;
 
-import android.content.Context;
-import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
-import android.support.v7.widget.PopupMenu;
+import android.databinding.DataBindingUtil;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
-import android.view.MenuInflater;
-import android.view.MenuItem;
-import android.view.MotionEvent;
-import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.RatingBar;
-import android.widget.TextView;
-import android.widget.Toast;
 
-import app.activities.MainActivity;
-import app.fragments.ScheduleFragment;
-import app.fragments.ScheduleStatisticsFragment;
-import app.fragments.TaskFragment;
-import app.scheduler.R;
+import com.scheduler.R;
+import com.scheduler.databinding.ScheduleItemBinding;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import app.rest.model.Schedule;
+import app.viewmodels.ItemScheduleViewModel;
 
-public class ScheduleAdapter extends RecyclerView.Adapter<ScheduleAdapter.ViewHolder> {
+public class ScheduleAdapter extends RecyclerView.Adapter<ScheduleAdapter.ScheduleViewHolder> {
     private List<Schedule> schedules;
-    private Context mCon;
 
-    public ScheduleAdapter(Context mCon, List<Schedule> schedules) {
-        this.mCon = mCon;
-        this.schedules = schedules;
+    public ScheduleAdapter() {
+        this.schedules = new ArrayList<>();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
-        private TextView nameTextView;
-        private RatingBar ratingBar;
-        private ImageView imageView;
+    public static class ScheduleViewHolder extends RecyclerView.ViewHolder {
+        ScheduleItemBinding itemBinding;
 
-        public ViewHolder(View itemView) {
-            super(itemView);
+        public ScheduleViewHolder(ScheduleItemBinding itemBinding) {
+            super(itemBinding.getRoot());
+            this.itemBinding = itemBinding;
+        }
 
-            this.nameTextView = itemView.findViewById(R.id.title_view);
-            this.ratingBar = itemView.findViewById(R.id.rating_view);
-            this.imageView = itemView.findViewById(R.id.img_more);
-
-            ratingBar.setFocusable(false);
-            ratingBar.setOnTouchListener(new View.OnTouchListener() {
-                @Override
-                public boolean onTouch(View v, MotionEvent event) {
-                    return true;
-                }
-            });
+        void bindSchedule(Schedule schedule) {
+            if (itemBinding.getScheduleViewModel() == null) {
+                itemBinding.setScheduleViewModel(new ItemScheduleViewModel(schedule,
+                        itemView.getContext()));
+            }
+            else {
+                itemBinding.getScheduleViewModel().setSchedule(schedule);
+            }
         }
     }
 
     @Override
-    public ScheduleAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.recyclerview_item,
-                parent, false);
+    public ScheduleAdapter.ScheduleViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        ScheduleItemBinding itemBinding = DataBindingUtil.inflate(LayoutInflater.from(parent.getContext()),
+                R.layout.schedule_item, parent, false);
 
-        ScheduleAdapter.ViewHolder viewHolder = new ScheduleAdapter.ViewHolder(view);
-        return viewHolder;
+        return new ScheduleViewHolder(itemBinding);
     }
 
     @Override
-    public void onBindViewHolder(final ScheduleAdapter.ViewHolder holder, final int position) {
-        holder.nameTextView.setText(schedules.get(position).getName());
-
-        StringBuilder sb = new StringBuilder(String.valueOf(schedules.get(position).getScheduleMilestone()));
-        sb.append(mCon.getString(R.string.percentage));
-
-        //holder.percentageView.setText(sb.toString());
-        holder.ratingBar.setRating((float) schedules.get(position).getRating());
-
-        holder.imageView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(mCon, "Item : " + position + " has been clicked",
-                        Toast.LENGTH_SHORT).show();
-
-                showPopUpMenu(holder.imageView, position);
-            }
-        });
+    public void onBindViewHolder(ScheduleViewHolder holder, final int position) {
+        holder.bindSchedule(schedules.get(position));
     }
 
     @Override
@@ -93,53 +58,7 @@ public class ScheduleAdapter extends RecyclerView.Adapter<ScheduleAdapter.ViewHo
         return schedules.size();
     }
 
-    public void showPopUpMenu(View view, int position) {
-        PopupMenu popupMenu = new PopupMenu(view.getContext(), view);
-        MenuInflater menuInflater = popupMenu.getMenuInflater();
-        menuInflater.inflate(R.menu.schedule_popup_menu, popupMenu.getMenu());
-        popupMenu.setOnMenuItemClickListener(new ScheduleMenuItemClickListener(position));
-        popupMenu.show();
-    }
-
-    class ScheduleMenuItemClickListener implements PopupMenu.OnMenuItemClickListener {
-        Schedule schedule;
-        public ScheduleMenuItemClickListener(int position) {
-            schedule = schedules.get(position);
-        }
-
-        @Override
-        public boolean onMenuItemClick(MenuItem item) {
-            Fragment fragment = null;
-            Bundle bundle = new Bundle();
-            String tag = null;
-            switch(item.getItemId()) {
-                case R.id.view_statistics:
-                    Toast.makeText(mCon, "Name: " + schedule.getName() + ", statistics",
-                            Toast.LENGTH_SHORT).show();
-
-                    fragment = new ScheduleStatisticsFragment();
-                    tag = MainActivity.SCHEDULE_STATISTICS_FRAGMENT;
-
-                    break;
-                case R.id.view_tasks:
-                    Toast.makeText(mCon, "Name: " + schedule.getName() + ", tasks",
-                            Toast.LENGTH_SHORT).show();
-
-                    fragment = new TaskFragment();
-                    tag = MainActivity.TASK_FRAGMENT;
-                    break;
-            }
-
-            if (fragment != null && tag != null) {
-                bundle.putString("schedule", schedule.toJson());
-                fragment.setArguments(bundle);
-                FragmentTransaction transaction = ((MainActivity)mCon).getSupportFragmentManager().beginTransaction();
-                transaction
-                        .replace(R.id.content_view, fragment, tag)
-                        .addToBackStack(null)
-                        .commit();
-            }
-            return false;
-        }
+    public void setScheduleList(List<Schedule> schedules) {
+        this.schedules = schedules;
     }
 }

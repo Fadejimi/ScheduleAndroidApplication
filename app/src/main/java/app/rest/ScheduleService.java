@@ -5,6 +5,7 @@ package app.rest;
 import java.util.List;
 
 import app.rest.model.Schedule;
+import io.reactivex.Observable;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.DELETE;
@@ -19,7 +20,7 @@ import retrofit2.http.Path;
 
 public interface ScheduleService {
     @GET("schedules")
-    Call<List<Schedule>> getSchedules();
+    Observable<List<Schedule>> getSchedules();
 
     @POST("schedules")
     Call<Void> createSchedule(@Body() Schedule schedule);

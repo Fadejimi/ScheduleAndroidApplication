@@ -36,6 +36,7 @@ public class LoginPresenter implements SignInPresenter, GoogleApiClient.Connecti
     public LoginPresenter(LoginView view) {
         this.fieldLoginView = view;
     }
+
     @Override
     public void createGoogleClient(LoginActivity loginView) {
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -46,22 +47,26 @@ public class LoginPresenter implements SignInPresenter, GoogleApiClient.Connecti
                 .enableAutoManage(loginView, this)
                 .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
                 .build();
+        Log.d(TAG, "createGoogleClient()");
     }
 
     @Override
     public void onStart() {
         mGoogleApiClient.connect();
+        Log.d(TAG, "onStart()");
     }
 
     @Override
     public void signIn(LoginActivity loginView) {
         Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
         loginView.startActivityForResult(signInIntent, RC_SIGN_IN);
+        Log.d(TAG, "signIn()");
     }
 
     private void handleSignInResult(GoogleSignInResult result, LoginActivity loginView) {
-        //Log.d(TAG, "handleSignInResult:" + result.isSuccess());
+        Log.d(TAG, "handleSignInResult:" + result.isSuccess());
         if (result.isSuccess()) {
+
             // Signed in successfully, show authenticated UI.
             GoogleSignInAccount acct = result.getSignInAccount();
             final String personName = acct.getDisplayName();
@@ -107,6 +112,7 @@ public class LoginPresenter implements SignInPresenter, GoogleApiClient.Connecti
 
     @Override
     public void onActivityResult(LoginActivity loginView, int requestCode, int resultCode, Intent data) {
+        Log.d(TAG, "onActivityResult");
         if (requestCode == RC_SIGN_IN) {
             GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
             handleSignInResult(result, loginView);
@@ -118,6 +124,7 @@ public class LoginPresenter implements SignInPresenter, GoogleApiClient.Connecti
         if (mGoogleApiClient.isConnected()) {
             mGoogleApiClient.disconnect();
         }
+        Log.d(TAG, "onStop()");
     }
 
     @Override

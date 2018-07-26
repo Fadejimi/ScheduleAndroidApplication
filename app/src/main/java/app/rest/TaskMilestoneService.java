@@ -3,6 +3,7 @@ package app.rest;
 import java.util.List;
 
 import app.rest.model.TasksMilestone;
+import io.reactivex.Observable;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.DELETE;
@@ -13,7 +14,7 @@ import retrofit2.http.Path;
 
 public interface TaskMilestoneService {
     @GET("tasks/{id}/task_milestones")
-    Call<List<TasksMilestone>> getTaskMilestones(@Path("id") long id);
+    Observable<List<TasksMilestone>> getTaskMilestones(@Path("id") long id);
 
     @POST("tasks/{id}/task_milestones")
     Call<Void> createTaskMilestones(@Path("id") long id, @Body() TasksMilestone tasksMilestone);

@@ -2,6 +2,8 @@ package app.rest;
 
 import android.text.TextUtils;
 
+import com.jakewharton.retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
+
 import java.util.concurrent.TimeUnit;
 
 import okhttp3.OkHttpClient;
@@ -22,7 +24,7 @@ public class APIClient {
 
     private static Retrofit.Builder builder =
             new Retrofit.Builder()
-                .baseUrl(baseUrl)
+                .baseUrl(baseUrl).addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .addConverterFactory(GsonConverterFactory.create());
 
     public static <S> S createService(Class<S> serviceClass) {

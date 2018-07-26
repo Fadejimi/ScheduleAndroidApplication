@@ -7,6 +7,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.beardedhen.androidbootstrap.BootstrapButton;
+import com.scheduler.R;
 
 import app.model.UserInfo;
 import app.recview.TaskDetailsAdapter;
@@ -31,15 +32,15 @@ public class TaskDetailsDialog implements DialogInterface{
 
     public void showDialog() {
         final Dialog dialog = new Dialog(context);
-        dialog.setContentView(app.scheduler.R.layout.new_task);
+        dialog.setContentView(R.layout.new_task);
         dialog.setTitle("New Task");
         dialog.show();
 
-        EditText nameEditText = dialog.findViewById(app.scheduler.R.id.title_edit_text);
-        EditText descriptionEditText = dialog.findViewById(app.scheduler.R.id.description_edit_text);
-        final EditText percentageEditText = dialog.findViewById(app.scheduler.R.id.percentage_text);
-        BootstrapButton submitButton = dialog.findViewById(app.scheduler.R.id.btn_submit);
-        BootstrapButton cancelButton = dialog.findViewById(app.scheduler.R.id.btn_cancel);
+        EditText nameEditText = dialog.findViewById(R.id.title_edit_text);
+        EditText descriptionEditText = dialog.findViewById(R.id.description_edit_text);
+        final EditText percentageEditText = dialog.findViewById(R.id.percentage_text);
+        BootstrapButton submitButton = dialog.findViewById(R.id.btn_submit);
+        BootstrapButton cancelButton = dialog.findViewById(R.id.btn_cancel);
 
         nameEditText.setVisibility(View.GONE);
         descriptionEditText.setVisibility(View.GONE);

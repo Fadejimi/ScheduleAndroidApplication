@@ -30,7 +30,7 @@ public class ScheduleChart implements ChartInterface {
     public List<Task> getData() {
         String token = userSingletonModel.getToken();
         TaskService taskService = APIClient.createService(TaskService.class, token);
-        Call<List<Task>> call = taskService.getTasks(schedule.getId());
+        Call<List<Task>> call = taskService.getTasksBySchedule(schedule.getId());
 
         call.enqueue(new Callback<List<Task>>() {
             @Override
